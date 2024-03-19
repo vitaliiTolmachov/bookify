@@ -2,14 +2,31 @@
 
 public abstract class Entity : IEquatable<Guid>
 {
+    private readonly List<IDomainEvent> _domainEvents = [];
+    
     protected Entity(Guid id)
     {
         if (id == Guid.Empty)
-            throw new ArgumentException(nameof(id));
+            throw new ArgumentException("Id should not be empty for entity", nameof(id));
         
         Id = id;
     }
     public Guid Id { get; init; }
+
+    public IReadOnlyCollection<IDomainEvent> GetDomainEvents()
+    {
+        return _domainEvents.AsReadOnly();
+    }
+
+    protected void RaiseDomainEvent(IDomainEvent @event)
+    {
+        _domainEvents.Add(@event);
+    }
+
+    public void ClearDomainEvents()
+    {
+        _domainEvents.Clear();
+    }
 
     public bool Equals(Guid otherId)
     {
