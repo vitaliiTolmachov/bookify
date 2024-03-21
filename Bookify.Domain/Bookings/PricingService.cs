@@ -3,9 +3,9 @@ using Bookify.Domain.Shared;
 
 namespace Bookify.Domain.Bookings;
 
-public static class PricingService
+public class PricingService
 {
-    public static PricingDetails CalculatePricingDetails(Apartment apartment, Duration duration)
+    public PricingDetails CalculatePricingDetails(Apartment apartment, Duration duration)
     {
         var currency = apartment.Price.Currency;
         var dailyPrice = apartment.Price.Amount * duration.Days;

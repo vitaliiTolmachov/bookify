@@ -13,7 +13,8 @@ public sealed class Review : Entity
         Guid bookingId,
         Guid userId,
         Rating rating,
-        Comment comment)
+        Comment comment,
+        DateTime createdOnUtc)
         : base(id)
     {
         ApartmentId = apartmentId;
@@ -21,7 +22,7 @@ public sealed class Review : Entity
         UserId = userId;
         Rating = rating;
         Comment = comment;
-        CreatedOnUtc = DateTime.UtcNow;
+        CreatedOnUtc = createdOnUtc;
     }
     
     public Guid ApartmentId { get; private set; }
@@ -39,7 +40,8 @@ public sealed class Review : Entity
     public static Result<Review> Create(
         Booking booking,
         Rating rating,
-        Comment comment)
+        Comment comment,
+        DateTime createdOnUtc)
     {
         if (booking.Status != BookingStatus.Completed)
             return Result<Review>.Failure(ReviewErrors.NotEligible);
@@ -50,7 +52,8 @@ public sealed class Review : Entity
             booking.Id,
             booking.UserId,
             rating,
-            comment);
+            comment,
+            createdOnUtc);
         
         review.RaiseDomainEvent(new ReviewCreatedEvent(review.Id));
 

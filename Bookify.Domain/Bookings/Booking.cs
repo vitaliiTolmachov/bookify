@@ -14,7 +14,8 @@ public class Booking : Entity
         Money priceForPeriod,
         Money cleaningFee,
         Money amenitiesUpCharge,
-        Money totalPrice)
+        Money totalPrice,
+        DateTime createdOnUtc)
         : base(id)
     {
         UserId = userId;
@@ -24,7 +25,7 @@ public class Booking : Entity
         CleaningFee = cleaningFee;
         AmenitiesUpCharge = amenitiesUpCharge;
         TotalPrice = totalPrice;
-        CreatedOnUtc = DateTime.UtcNow;
+        CreatedOnUtc = createdOnUtc;
         Status = BookingStatus.Reserved;
     }
 
@@ -45,9 +46,11 @@ public class Booking : Entity
     public static Booking Reserve(
         Guid userId,
         Apartment apartment,
-        Duration duration)
+        Duration duration,
+        DateTime createdOnUtc,
+        PricingService pricingService)
     {
-        var pricingDetails = PricingService.CalculatePricingDetails(apartment, duration);
+        var pricingDetails = pricingService.CalculatePricingDetails(apartment, duration);
         
         var booking = new Booking(
             Guid.NewGuid(),
@@ -57,7 +60,8 @@ public class Booking : Entity
             pricingDetails.PriceForPeriod,
             pricingDetails.CleaningFee,
             pricingDetails.AmenitiesUpCharge,
-            pricingDetails.TotalPrice);
+            pricingDetails.TotalPrice,
+            createdOnUtc);
         
         booking.RaiseDomainEvent(new BookingCreatedEvent(booking.Id));
 
@@ -66,44 +70,44 @@ public class Booking : Entity
         return booking;
     }
 
-    public Result Confirm()
+    public Result Confirm(DateTime confirmedOnUtc)
     {
         if (Status != BookingStatus.Reserved)
             return Result.Failure(BookingErrors.NotReserved);
 
         Status = BookingStatus.Confirmed;
-        ConfirmedOnUtc = DateTime.UtcNow;
+        ConfirmedOnUtc = confirmedOnUtc;
         
         base.RaiseDomainEvent(new BookingConfirmedEvent(this.Id));
         return Result.Success();
     }
 
-    public Result Reject()
+    public Result Reject(DateTime rejectedOnUtc)
     {
         if(Status != BookingStatus.Reserved)
             return Result.Failure(BookingErrors.NotReserved);
 
         Status = BookingStatus.Rejected;
-        RejectedOnUtc = DateTime.UtcNow;
+        RejectedOnUtc = rejectedOnUtc;
         
         base.RaiseDomainEvent(new BookingRejectedEvent(this.Id));
         return Result.Success();
     }
 
-    public Result Complete()
+    public Result Complete(DateTime completedOnUtc)
     {
         if (Status != BookingStatus.Confirmed)
             return Result.Failure(BookingErrors.NotConfirmed);
 
         Status = BookingStatus.Completed;
-        CompletedOnUtc = DateTime.UtcNow;
+        CompletedOnUtc = completedOnUtc;
         
         base.RaiseDomainEvent(new BookingCompletedEvent(this.Id));
         
         return Result.Success();
     }
 
-    public Result Cancel()
+    public Result Cancel(DateTime cancelledOnUtc)
     {
         if(Status != BookingStatus.Confirmed)
             return Result.Failure(BookingErrors.NotConfirmed);
@@ -113,7 +117,7 @@ public class Booking : Entity
             return Result.Failure(BookingErrors.AlreadyStarted);
 
         Status = BookingStatus.Cancelled;
-        CancelledOnUtc = DateTime.UtcNow;
+        CancelledOnUtc = cancelledOnUtc;
         
         base.RaiseDomainEvent(new BookingCancelledEvent(this.Id));
         return Result.Success();
