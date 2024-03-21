@@ -51,7 +51,6 @@ public class Booking : Entity
         PricingService pricingService)
     {
         var pricingDetails = pricingService.CalculatePricingDetails(apartment, duration);
-        
         var booking = new Booking(
             Guid.NewGuid(),
             userId,
