@@ -52,7 +52,7 @@ public sealed class ReserveBookingCommandHandler : ICommandHandler<ReserveBookin
         {
             return Result<Guid>.Failure(BookingErrors.Overlap);
         }
-        
+        //NOTE: Possible race condition here. Will be resolved as concurrency token on entity
         var booking = Booking.Reserve(user.Id, apartment, duration, _dateTimeProvider.CurrentTimeUtc, _pricingService);
 
         await _bookingRepository.AddAsync(booking, cancellationToken);

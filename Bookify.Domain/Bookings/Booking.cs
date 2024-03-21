@@ -63,7 +63,7 @@ public class Booking : Entity
             pricingDetails.TotalPrice,
             createdOnUtc);
         
-        booking.RaiseDomainEvent(new BookingCreatedEvent(booking.Id));
+        booking.RaiseDomainEvent(new BookingReservedEvent(booking.Id));
 
         apartment.LastBookedOnUtc = booking.CreatedOnUtc;
         
