@@ -1,4 +1,6 @@
-﻿namespace Bookify.Domain.Shared;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Bookify.Domain.Shared;
 
 public class Result
 {
@@ -34,6 +36,11 @@ public class Result<TValue> : Result
     {
         _value = value;
     }
+    
+    [NotNull]
+    public TValue Value => IsSuccess
+        ? _value!
+        : throw new InvalidOperationException("The value of a failure result can not be accessed.");
 
     public static Result<TValue> Success(TValue value)
         => new (value, true, Shared.Error.None);
