@@ -1,8 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Bookify.Domain.Abstractions;
+using Microsoft.EntityFrameworkCore;
 
 namespace Bookify.Infrastructure.Db;
 
-public sealed class ApplicationDbContext : DbContext
+public sealed class ApplicationDbContext : DbContext, IUnitOfWork
 {
     public ApplicationDbContext(DbContextOptions options) 
         :base(options)

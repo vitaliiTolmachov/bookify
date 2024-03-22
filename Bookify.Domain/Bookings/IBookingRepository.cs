@@ -1,10 +1,13 @@
-﻿using Bookify.Domain.Abstractions;
-using Bookify.Domain.Apartments;
+﻿using Bookify.Domain.Apartments;
 
 namespace Bookify.Domain.Bookings;
 
-public interface IBookingRepository : IGenericRepository<Booking>
+public interface IBookingRepository
 {
+    Task<Booking?> FindAsync(Guid id, CancellationToken cancellationToken = default);
+    
+    void AddAsync(Booking domainEntity, CancellationToken cancellationToken = default);
+    
     Task<bool> IsOverlappingAsync(
         Apartment apartment,
         Duration duration,

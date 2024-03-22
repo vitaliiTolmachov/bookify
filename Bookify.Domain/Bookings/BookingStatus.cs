@@ -8,3 +8,13 @@ public enum BookingStatus
     Cancelled = 4,
     Completed = 5
 }
+
+public static class BookingStatusExtensions
+{
+    public static readonly BookingStatus[] ActiveBookingStatuses =
+    [
+        BookingStatus.Reserved,
+        BookingStatus.Confirmed,
+        BookingStatus.Completed
+    ];
+}

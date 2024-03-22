@@ -1,8 +1,6 @@
-﻿using Bookify.Domain.Abstractions;
+﻿namespace Bookify.Domain.Apartments;
 
-namespace Bookify.Domain.Apartments;
-
-public interface IApartmentRepository : IGenericRepository<Apartment>
+public interface IApartmentRepository
 {
-    
+    Task<Apartment?> FindAsync(Guid id, CancellationToken cancellationToken = default);
 }

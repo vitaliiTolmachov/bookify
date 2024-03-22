@@ -1,8 +1,6 @@
-﻿using Bookify.Domain.Abstractions;
+﻿namespace Bookify.Domain.Users;
 
-namespace Bookify.Domain.Users;
-
-public interface IUserRepository : IGenericRepository<User>
+public interface IUserRepository
 {
-    
+    Task<User?> FindAsync(Guid id, CancellationToken cancellationToken = default);
 }
