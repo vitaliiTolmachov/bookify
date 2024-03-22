@@ -1,5 +1,6 @@
 ﻿using Bookify.Application.Abstractions.Clock;
 using Bookify.Application.Abstractions.Email;
+using Bookify.Application.Data;
 using Bookify.Domain.Abstractions;
 using Bookify.Domain.Apartments;
 using Bookify.Domain.Bookings;
@@ -8,6 +9,7 @@ using Bookify.Infrastructure.Clock;
 using Bookify.Infrastructure.Db;
 using Bookify.Infrastructure.Db.Repositories;
 using Bookify.Infrastructure.Email;
+using Dapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -41,6 +43,10 @@ public static class DependencyInjection
         services.AddScoped<IBookingRepository, BookingRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<ApplicationDbContext>());
+
+        services.AddSingleton<IDbConnectionFactory>(new DbConnectionFactory(connectionString));
+        
+        SqlMapper.AddTypeHandler(new DateOnlyHandler());
             
         return services;
     }

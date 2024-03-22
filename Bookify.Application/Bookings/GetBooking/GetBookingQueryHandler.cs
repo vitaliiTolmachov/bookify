@@ -16,7 +16,7 @@ internal sealed class GetBookingQueryHandler : IQueryHandler<GetBookingQuery, Bo
     
     public async Task<Result<BookingResponse>> Handle(GetBookingQuery request, CancellationToken cancellationToken)
     {
-        using (var dbConnection = _dbConnectionFactory.CreateDbConnection())
+        using (var dbConnection = await _dbConnectionFactory.CreateDbConnection())
         {
             //TIP: Can be extracted to the separate view in db
             const string sql = """
