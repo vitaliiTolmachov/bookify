@@ -24,5 +24,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCustomGlobalExceptionMiddleware();
 
 app.Run();
