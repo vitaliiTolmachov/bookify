@@ -29,6 +29,10 @@ public class Booking : Entity
         Status = BookingStatus.Reserved;
     }
 
+    private Booking()
+    {
+    }
+
     public Guid ApartmentId { get; private set; }
     public Guid UserId { get; private set; }
     public Duration Duration { get; private set; }

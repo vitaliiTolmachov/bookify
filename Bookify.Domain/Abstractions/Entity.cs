@@ -3,6 +3,13 @@
 public abstract class Entity : IEquatable<Guid>
 {
     private readonly List<IDomainEvent> _domainEvents = [];
+
+    /*To support EF migrations.
+    Otherwise extract db Entities to separate classes and use
+    Mapper to map from domain entity to dbEntity*/
+    protected Entity()
+    {
+    }
     
     protected Entity(Guid id)
     {
