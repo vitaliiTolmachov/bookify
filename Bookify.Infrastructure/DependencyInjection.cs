@@ -18,7 +18,7 @@ namespace Bookify.Infrastructure;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddApplicationServices(
+    public static IServiceCollection AddInfrastructureServices(
         this IServiceCollection services)
     {
         services.AddTransient<IDateTimeProvider, DateTimeProvider>();
