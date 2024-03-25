@@ -12,10 +12,10 @@ internal sealed class DbConnectionFactory : IDbConnectionFactory
     {
         _connectionString = connectionString;
     }
-    public async Task<IDbConnection> CreateDbConnection()
+    public IDbConnection CreateDbConnection()
     {
         var connection = new NpgsqlConnection(_connectionString);
-        await connection.OpenAsync();
+        connection.Open();
         return connection;
     }
 }

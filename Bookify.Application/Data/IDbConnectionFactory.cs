@@ -4,5 +4,5 @@ namespace Bookify.Application.Data;
 
 public interface IDbConnectionFactory
 {
-    Task<IDbConnection> CreateDbConnection();
+    IDbConnection CreateDbConnection();
 }

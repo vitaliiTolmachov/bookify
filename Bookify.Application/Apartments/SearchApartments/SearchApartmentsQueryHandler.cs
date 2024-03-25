@@ -21,7 +21,7 @@ internal sealed class SearchApartmentsQueryHandler : IQueryHandler<SearchApartme
         if (request.StartDate > request.EndDate)
             return new List<ApartmentResponse>();
         
-        using (var dbConnection = await _dbConnectionFactory.CreateDbConnection())
+        using (var dbConnection = _dbConnectionFactory.CreateDbConnection())
         {
             const string sql = """
                                SELECT
