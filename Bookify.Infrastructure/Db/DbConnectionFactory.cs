@@ -1,6 +1,6 @@
 ﻿using System.Data;
 using Bookify.Application.Data;
-using Microsoft.Data.SqlClient;
+using Npgsql;
 
 namespace Bookify.Infrastructure.Db;
 
@@ -14,7 +14,7 @@ internal sealed class DbConnectionFactory : IDbConnectionFactory
     }
     public async Task<IDbConnection> CreateDbConnection()
     {
-        var connection = new SqlConnection(_connectionString);
+        var connection = new NpgsqlConnection(_connectionString);
         await connection.OpenAsync();
         return connection;
     }

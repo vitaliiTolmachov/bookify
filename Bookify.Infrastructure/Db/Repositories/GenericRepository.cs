@@ -7,7 +7,7 @@ public class GenericRepository<T> where T:Entity
 {
     protected readonly ApplicationDbContext DbContext;
 
-    protected GenericRepository(ApplicationDbContext dbContext)
+    public GenericRepository(ApplicationDbContext dbContext)
     {
         DbContext = dbContext;
     }

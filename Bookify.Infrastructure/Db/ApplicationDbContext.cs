@@ -9,11 +9,12 @@ public sealed class ApplicationDbContext : DbContext, IUnitOfWork
 {
     private readonly IPublisher _eventPublisher;
 
-    public ApplicationDbContext(DbContextOptions options, IPublisher eventPublisher) 
-        :base(options)
+    public ApplicationDbContext(DbContextOptions options, IPublisher eventPublisher)
+        : base(options)
     {
         _eventPublisher = eventPublisher;
     }
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -37,7 +38,7 @@ public sealed class ApplicationDbContext : DbContext, IUnitOfWork
         }
     }
 
-    private async Task PublishDomainEventsAsync(CancellationToken cancellationToken)
+    private Task PublishDomainEventsAsync(CancellationToken cancellationToken)
     {
         var events = base.ChangeTracker.Entries<Entity>()
             .Select(x => x.Entity)
@@ -45,6 +46,6 @@ public sealed class ApplicationDbContext : DbContext, IUnitOfWork
 
         var publishEventTasks = events.Select(x => _eventPublisher.Publish(x, cancellationToken));
 
-        await Task.WhenAll(publishEventTasks);
+        return Task.WhenAll(publishEventTasks);
     }
 }

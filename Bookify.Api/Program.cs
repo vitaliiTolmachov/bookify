@@ -10,6 +10,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddApplicationLayer();
 builder.Services.AddInfrastructureServices();
 builder.Services.AddDatabase(builder.Configuration);
+builder.Services.AddControllers();
 
 var app = builder.Build();
 
