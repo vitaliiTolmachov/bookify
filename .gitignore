@@ -1,3 +1,5 @@
+.containers/
+
 bin/
 obj/
 /packages/
