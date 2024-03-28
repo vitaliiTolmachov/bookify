@@ -11,9 +11,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddApplicationLayer();
-builder.Services.AddInfrastructureServices();
-builder.Services.AddDatabase(builder.Configuration);
-builder.Services.AddControllers();
+builder.Services.AddInfrastructure(builder.Configuration);
 
 var app = builder.Build();
 
@@ -25,6 +23,9 @@ if (app.Environment.IsDevelopment())
     app.ApplyMigrations();
     //app.SeedData();
 }
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.UseHttpsRedirection();
 app.UseCustomGlobalExceptionMiddleware();
