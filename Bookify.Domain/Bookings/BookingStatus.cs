@@ -11,10 +11,10 @@ public enum BookingStatus
 
 public static class BookingStatusExtensions
 {
-    public static readonly BookingStatus[] ActiveBookingStatuses =
+    public static readonly int[] ActiveBookingStatuses =
     [
-        BookingStatus.Reserved,
-        BookingStatus.Confirmed,
-        BookingStatus.Completed
+        (int)BookingStatus.Reserved,
+        (int)BookingStatus.Confirmed,
+        (int)BookingStatus.Completed
     ];
 }

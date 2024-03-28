@@ -32,8 +32,8 @@ public class BookingsController : Controller
         var command = new ReserveBookingCommand(
             request.UserId,
             request.ApartmentId,
-            request.StartDate,
-            request.EndDate);
+            DateOnly.FromDateTime(request.StartDate),
+            DateOnly.FromDateTime(request.EndDate));
         var result = await _mediator.Send(command, cancellationToken);
         return CreatedAtAction(nameof(GetById), routeValues: new {id = result.Value}, value: result.Value);
     }

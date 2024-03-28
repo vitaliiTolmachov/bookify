@@ -20,7 +20,7 @@ internal sealed class BookingRepository : GenericRepository<Booking>, IBookingRe
                     booking.ApartmentId == apartment.Id &&
                     booking.Duration.Start <= duration.End &&
                     booking.Duration.End >= duration.Start &&
-                    BookingStatusExtensions.ActiveBookingStatuses.Contains(booking.Status),
+                    BookingStatusExtensions.ActiveBookingStatuses.Contains((int)booking.Status),
                 cancellationToken);
     }
 }

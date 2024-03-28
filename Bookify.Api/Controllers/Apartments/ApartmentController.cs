@@ -17,11 +17,12 @@ public class ApartmentController : Controller
     
     [HttpGet]
     public async Task<IActionResult> SearchApartments(
-        DateOnly startDate,
-        DateOnly endDate,
+        [FromQuery]SearchApartmentsRequest request,
         CancellationToken cancellationToken)
     {
-        var searchQuery = new SearchApartmentsQuery(startDate, endDate);
+        var searchQuery = new SearchApartmentsQuery(
+            DateOnly.FromDateTime(request.StartDate),
+            DateOnly.FromDateTime(request.EndDate));
         var result = await _mediator.Send(searchQuery, cancellationToken);
         return Ok(result);
     }
