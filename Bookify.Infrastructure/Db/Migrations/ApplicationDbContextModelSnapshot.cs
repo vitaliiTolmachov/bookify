@@ -55,9 +55,9 @@ namespace Bookify.Infrastructure.Db.Migrations
                         .HasColumnName("xmin");
 
                     b.HasKey("Id")
-                        .HasName("pk_apartment");
+                        .HasName("pk_apartments");
 
-                    b.ToTable("apartment", (string)null);
+                    b.ToTable("apartments", (string)null);
                 });
 
             modelBuilder.Entity("Bookify.Domain.Bookings.Booking", b =>
@@ -217,6 +217,11 @@ namespace Bookify.Infrastructure.Db.Migrations
                                 .HasColumnType("text")
                                 .HasColumnName("address_state");
 
+                            b1.Property<string>("Street")
+                                .IsRequired()
+                                .HasColumnType("text")
+                                .HasColumnName("address_street");
+
                             b1.Property<string>("ZipCode")
                                 .IsRequired()
                                 .HasColumnType("text")
@@ -224,11 +229,11 @@ namespace Bookify.Infrastructure.Db.Migrations
 
                             b1.HasKey("ApartmentId");
 
-                            b1.ToTable("apartment");
+                            b1.ToTable("apartments");
 
                             b1.WithOwner()
                                 .HasForeignKey("ApartmentId")
-                                .HasConstraintName("fk_apartment_apartment_id");
+                                .HasConstraintName("fk_apartments_apartments_id");
                         });
 
                     b.OwnsOne("Bookify.Domain.Shared.Money", "CleaningFee", b1 =>
@@ -248,11 +253,11 @@ namespace Bookify.Infrastructure.Db.Migrations
 
                             b1.HasKey("ApartmentId");
 
-                            b1.ToTable("apartment");
+                            b1.ToTable("apartments");
 
                             b1.WithOwner()
                                 .HasForeignKey("ApartmentId")
-                                .HasConstraintName("fk_apartment_apartment_id");
+                                .HasConstraintName("fk_apartments_apartments_id");
                         });
 
                     b.OwnsOne("Bookify.Domain.Shared.Money", "Price", b1 =>
@@ -272,11 +277,11 @@ namespace Bookify.Infrastructure.Db.Migrations
 
                             b1.HasKey("ApartmentId");
 
-                            b1.ToTable("apartment");
+                            b1.ToTable("apartments");
 
                             b1.WithOwner()
                                 .HasForeignKey("ApartmentId")
-                                .HasConstraintName("fk_apartment_apartment_id");
+                                .HasConstraintName("fk_apartments_apartments_id");
                         });
 
                     b.Navigation("Address")
@@ -296,7 +301,7 @@ namespace Bookify.Infrastructure.Db.Migrations
                         .HasForeignKey("ApartmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_bookings_apartment_apartment_id");
+                        .HasConstraintName("fk_bookings_apartments_apartment_id");
 
                     b.HasOne("Bookify.Domain.Users.User", null)
                         .WithMany()
@@ -447,7 +452,7 @@ namespace Bookify.Infrastructure.Db.Migrations
                         .HasForeignKey("ApartmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_reviews_apartment_apartment_id");
+                        .HasConstraintName("fk_reviews_apartments_apartment_id");
 
                     b.HasOne("Bookify.Domain.Bookings.Booking", null)
                         .WithMany()
