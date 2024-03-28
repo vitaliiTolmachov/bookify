@@ -4,6 +4,9 @@ services:
   bookify.api:
     image: ${DOCKER_REGISTRY-}bookifyapi
     container_name: Bookify.Api
+    ports:
+      - "8080:8080"
+      - "8081:8081"
     build:
       context: .
       dockerfile: Bookify.Api/Dockerfile
