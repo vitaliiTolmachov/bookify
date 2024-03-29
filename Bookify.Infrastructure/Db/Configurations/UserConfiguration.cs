@@ -10,7 +10,11 @@ internal sealed class UserConfiguration : IEntityTypeConfiguration<User>
     {
         builder.ToTable("users");
         builder.HasKey(x => x.Id);
+        
         builder.HasIndex(x => x.Email)
+            .IsUnique();
+        
+        builder.HasIndex(x => x.IdentityId)
             .IsUnique();
 
         builder.Property(x => x.FirstName)
