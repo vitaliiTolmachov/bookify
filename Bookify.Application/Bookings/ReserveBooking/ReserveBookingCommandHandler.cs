@@ -58,7 +58,7 @@ public sealed class ReserveBookingCommandHandler : ICommandHandler<ReserveBookin
         {
             var booking = Booking.Reserve(user.Id, apartment, duration, _dateTimeProvider.CurrentTimeUtc, _pricingService);
 
-            _bookingRepository.AddAsync(booking, cancellationToken);
+            _bookingRepository.Add(booking, cancellationToken);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             return booking.Id;

@@ -10,6 +10,10 @@ services:
     build:
       context: .
       dockerfile: Bookify.Api/Dockerfile
+#    links:
+#      - bookify-idp
+    networks:
+      - "backend"
     depends_on:
      - bookify-db
 
@@ -21,14 +25,16 @@ services:
       - POSTGRES_DB=bookify
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+    networks:
+      - "backend"
     ports:
-      - 5432:5432
+      - "5432:5432"
     volumes:
       - ./.containers/database:/var/lib/postgresql/data
   
-  bookify-identity:
+  bookify-idp:
     image: quay.io/keycloak/keycloak:latest
-    container_name: Bookify.Identity
+    container_name: "Bookify.identity"
     command: start-dev --import-realm
     environment:
       - KEYCLOAK_ADMIN=admin
@@ -36,6 +42,14 @@ services:
     volumes:
       - ./.containers/identity:/opt/keycloak/data
       - ./.files/bookify-realm-export.json:/opt/keycloak/data/import/realm.json
+    networks:
+      backend:
+        aliases:
+          - "bookify-idp"
     ports:
-      - 18080:8080
+      - "18080:8080"
+  
+networks:
+  backend:
+    driver: bridge
       

@@ -1,4 +1,5 @@
-﻿using Bookify.Application.Abstractions.Clock;
+﻿using Bookify.Application.Abstractions.Authentication;
+using Bookify.Application.Abstractions.Clock;
 using Bookify.Application.Abstractions.Email;
 using Bookify.Application.Data;
 using Bookify.Domain.Abstractions;
@@ -15,6 +16,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 namespace Bookify.Infrastructure;
 
@@ -34,14 +36,28 @@ public static class DependencyInjection
         return services;
     }
 
-    private static void ConfigureAuthentication(
+    private static IServiceCollection ConfigureAuthentication(
         IServiceCollection services,
         IConfiguration configuration)
     {
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer();
-        services.Configure<AuthenticationOptions>(configuration.GetSection("AuthenticationOptions"));
+        
+        services.Configure<AuthenticationOptions>(configuration.GetSection("AuthenticationOptions") ??
+                                                  throw new KeyNotFoundException("AuthenticationOptions"));
+        
         services.ConfigureOptions<JwtBearerOptionsSetUp>();
+
+        services.Configure<KeycloakOptions>(configuration.GetSection("KeyCloak") ??
+                                            throw new KeyNotFoundException("KeyCloak"));
+        services.AddTransient<AdminAuthorizationRequestDelegatingHandler>();
+        services.AddHttpClient<IBookifyAuthenticationService, BookifyAuthenticationService>((provider, client) =>
+        {
+            var keycloakOptions = provider.GetRequiredService<IOptions<KeycloakOptions>>().Value;
+            client.BaseAddress = new Uri(keycloakOptions.AdminUrl);
+        }).AddHttpMessageHandler<AdminAuthorizationRequestDelegatingHandler>();
+
+        return services;
     }
 
     private static IServiceCollection AddDatabase(
