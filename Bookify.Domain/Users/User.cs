@@ -5,6 +5,8 @@ namespace Bookify.Domain.Users;
 
 public sealed class User : Entity
 {
+    private readonly List<Role> _roles = new List<Role>();
+    
     private User(Guid id, FirstName firstName, LastName lastName, Email email)
         : base(id)
     {
@@ -26,10 +28,14 @@ public sealed class User : Entity
     should have initial value*/
     public string IdentityId { get; private set; } = String.Empty;
 
+    public IReadOnlyCollection<Role> Roles => _roles.AsReadOnly();
+
     public static User Create(FirstName firstName, LastName lastName, Email email)
     {
         var user = new User(Guid.NewGuid(), firstName, lastName, email);
         user.RaiseDomainEvent(new UserCreatedEvent(user.Id));
+        
+        user._roles.Add(Role.Registered);
         return user;
     }
 

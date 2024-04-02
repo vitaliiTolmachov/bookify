@@ -18,7 +18,7 @@ public class GenericRepository<T> where T:Entity
             .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
     }
     
-    public void Add(T entity, CancellationToken cancellationToken = default)
+    public virtual void Add(T entity, CancellationToken cancellationToken = default)
     {
         DbContext.Add(entity);
     }

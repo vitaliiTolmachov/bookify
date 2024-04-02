@@ -8,4 +8,14 @@ public class UserRepository : GenericRepository<User>, IUserRepository
         : base(dbContext)
     {
     }
+
+    public override void Add(User entity, CancellationToken cancellationToken = default)
+    {
+        foreach (var role in entity.Roles)
+        {
+            DbContext.Attach(role);
+        }
+
+        DbContext.Attach(entity);
+    }
 }

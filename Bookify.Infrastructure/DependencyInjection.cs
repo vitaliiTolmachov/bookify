@@ -70,6 +70,9 @@ public static class DependencyInjection
             client.BaseAddress = new Uri(keycloakOptions.TokenUrl);
         });
 
+        services.AddHttpContextAccessor();
+        services.AddScoped<IUserIdentityProvider, UserIdentityProvider>();
+
         return services;
     }
 

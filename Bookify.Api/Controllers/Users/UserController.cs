@@ -1,4 +1,5 @@
-﻿using Bookify.Application.User.Login;
+﻿using Bookify.Application.User.GetLoggedIn;
+using Bookify.Application.User.Login;
 using Bookify.Application.User.Registration;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -15,6 +16,17 @@ public class UserController : Controller
     public UserController(ISender mediator)
     {
         _mediator = mediator;
+    }
+    
+    [Authorize(Roles = Roles.Registered)]
+    [HttpGet("me")]
+    public async Task<IActionResult> GetLoggedInUser(CancellationToken cancellationToken)
+    {
+        var query = new GetLoggedInUserQuery();
+        
+        var result = await _mediator.Send(query, cancellationToken);
+
+        return Ok(result.Value);
     }
     
     [AllowAnonymous]
