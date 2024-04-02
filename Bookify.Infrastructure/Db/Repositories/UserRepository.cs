@@ -16,6 +16,6 @@ public class UserRepository : GenericRepository<User>, IUserRepository
             DbContext.Attach(role);
         }
 
-        DbContext.Attach(entity);
+        DbContext.Add(entity);
     }
 }

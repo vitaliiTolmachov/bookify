@@ -7,17 +7,20 @@ using Bookify.Domain.Apartments;
 using Bookify.Domain.Bookings;
 using Bookify.Domain.Users;
 using Bookify.Infrastructure.Authentication;
+using Bookify.Infrastructure.Authorization;
 using Bookify.Infrastructure.Clock;
 using Bookify.Infrastructure.Db;
 using Bookify.Infrastructure.Db.Repositories;
 using Bookify.Infrastructure.Email;
 using Dapper;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.JsonWebTokens;
+using AuthenticationOptions = Bookify.Infrastructure.Authentication.AuthenticationOptions;
 
 namespace Bookify.Infrastructure;
 
@@ -34,6 +37,16 @@ public static class DependencyInjection
 
         ConfigureAuthentication(services, configuration);
 
+        ConfigureAuthorization(services);
+
+        return services;
+    }
+
+    private static IServiceCollection ConfigureAuthorization(
+        IServiceCollection services)
+    {
+        services.AddScoped<RolesProvider>();
+        services.AddTransient<IClaimsTransformation, CustomClaimsTransformation>();
         return services;
     }
 
