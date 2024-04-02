@@ -17,6 +17,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.JsonWebTokens;
 
 namespace Bookify.Infrastructure;
 
@@ -41,7 +42,13 @@ public static class DependencyInjection
         IConfiguration configuration)
     {
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer();
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters.ValidateActor = false;
+                options.TokenValidationParameters.ValidateAudience = false;
+                options.TokenValidationParameters.ValidateIssuerSigningKey = false;
+                options.TokenValidationParameters.SignatureValidator = (token, _) => new JsonWebToken(token);
+            });
         
         services.Configure<AuthenticationOptions>(configuration.GetSection("AuthenticationOptions") ??
                                                   throw new KeyNotFoundException("AuthenticationOptions"));
@@ -56,6 +63,12 @@ public static class DependencyInjection
             var keycloakOptions = provider.GetRequiredService<IOptions<KeycloakOptions>>().Value;
             client.BaseAddress = new Uri(keycloakOptions.AdminUrl);
         }).AddHttpMessageHandler<AdminAuthorizationRequestDelegatingHandler>();
+
+        services.AddHttpClient<IJwtService, JwtService>((provider, client) =>
+        {
+            var keycloakOptions = provider.GetRequiredService<IOptions<KeycloakOptions>>().Value;
+            client.BaseAddress = new Uri(keycloakOptions.TokenUrl);
+        });
 
         return services;
     }
