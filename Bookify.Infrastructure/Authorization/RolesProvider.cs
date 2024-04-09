@@ -15,6 +15,7 @@ internal sealed class RolesProvider
 
     public async Task<UserRolesResponse> GetIdentityRolesAsync(string identityId)
     {
+        //TODO: Add caching
         var userRoles = await _dbContext.Set<User>()
             .Where(x => x.IdentityId == identityId)
             .Select(x => new UserRolesResponse

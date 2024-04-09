@@ -15,6 +15,7 @@ using Bookify.Infrastructure.Email;
 using Dapper;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -45,8 +46,15 @@ public static class DependencyInjection
     private static IServiceCollection ConfigureAuthorization(
         IServiceCollection services)
     {
+        //Role-based authorization
         services.AddScoped<RolesProvider>();
         services.AddTransient<IClaimsTransformation, CustomClaimsTransformation>();
+        
+        //Permission-based authorization
+        services.AddScoped<PermissionsProvider>();
+        services.AddTransient<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
+        services.AddTransient<IAuthorizationHandler, PermissionAuthHandler>();
+        
         return services;
     }
 

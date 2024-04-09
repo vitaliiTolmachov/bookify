@@ -1,6 +1,6 @@
 ﻿namespace Bookify.Domain.Users;
 
-public class Role
+public sealed class Role
 {
     public static Role Registered = new Role(1, "Registered");
     
@@ -14,4 +14,5 @@ public class Role
     public string Name { get; init; } = string.Empty;
 
     public ICollection<User> Users { get; init; } = new List<User>();
+    public ICollection<Permission> Permissions { get; init; } = new List<Permission>();
 }
