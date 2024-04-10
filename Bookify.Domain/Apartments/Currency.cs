@@ -21,8 +21,8 @@ public record Currency
         if (string.IsNullOrEmpty(code))
             throw new ArgumentNullException(nameof(code));
 
-        if (AllowedCurrencies.All(x => x.Code != code))
-            throw new ApplicationException("Unsupported currency code");
+        // if (AllowedCurrencies.All(x => x.Code != code))
+        //     throw new ApplicationException("Unsupported currency code");
         
         Code = code;
     }

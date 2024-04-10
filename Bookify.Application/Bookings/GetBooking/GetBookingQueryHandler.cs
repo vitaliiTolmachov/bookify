@@ -1,5 +1,8 @@
-﻿using Bookify.Application.Abstractions.Messaging;
+﻿using Bookify.Application.Abstractions.Authentication;
+using Bookify.Application.Abstractions.Messaging;
 using Bookify.Application.Data;
+using Bookify.Application.Exceptions;
+using Bookify.Domain.Bookings;
 using Bookify.Domain.Shared;
 using Dapper;
 
@@ -8,10 +11,14 @@ namespace Bookify.Application.Bookings.GetBooking;
 internal sealed class GetBookingQueryHandler : IQueryHandler<GetBookingQuery, BookingResponse>
 {
     private readonly IDbConnectionFactory _dbConnectionFactory;
+    private readonly IUserIdentityProvider _userIdentityProvider;
 
-    public GetBookingQueryHandler(IDbConnectionFactory dbConnectionFactory)
+    public GetBookingQueryHandler(
+        IDbConnectionFactory dbConnectionFactory,
+        IUserIdentityProvider userIdentityProvider)
     {
         _dbConnectionFactory = dbConnectionFactory;
+        _userIdentityProvider = userIdentityProvider;
     }
     
     public async Task<Result<BookingResponse>> Handle(GetBookingQuery request, CancellationToken cancellationToken)
@@ -39,12 +46,22 @@ internal sealed class GetBookingQueryHandler : IQueryHandler<GetBookingQuery, Bo
                                FROM bookings
                                WHERE id = @BookingId
                                """;
-            var bookingResponse = await dbConnection.QueryFirstAsync<BookingResponse>(sql, new
+            var booking = await dbConnection.QueryFirstOrDefaultAsync<BookingResponse>(sql, new
             {
                 BookingId = request.BookingId
             });
 
-            return bookingResponse;
+            if (booking is null)
+            {
+                return Result<BookingResponse>.Failure(BookingErrors.NotFound(request.BookingId));
+            }
+
+            if (booking.UserId != _userIdentityProvider.GetIUserId())
+            {
+                throw new AccessDeniedException();
+            }
+
+            return booking;
         }
     }
 }

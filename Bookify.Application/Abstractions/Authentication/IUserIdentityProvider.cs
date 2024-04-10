@@ -3,4 +3,6 @@
 public interface IUserIdentityProvider
 {
     string GetIdentityId();
+
+    Guid GetIUserId();
 }

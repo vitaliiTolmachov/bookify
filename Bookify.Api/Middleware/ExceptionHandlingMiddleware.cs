@@ -57,6 +57,12 @@ public class ExceptionHandlingMiddleware
                 "Validation error",
                 "One or more validation errors has occurred",
                 validationException.Errors),
+            AccessDeniedException accessDeniedException => new ExceptionDetails(
+                StatusCodes.Status403Forbidden,
+                "AccessDeniedFailure",
+                "Access Denied",
+                "You do not have access to such resource",
+                null),
             _ => new ExceptionDetails(
                 StatusCodes.Status500InternalServerError,
                 "ServerError",
@@ -66,7 +72,7 @@ public class ExceptionHandlingMiddleware
         };
     }
 
-    internal record ExceptionDetails(
+    private record ExceptionDetails(
         int Status,
         string Type,
         string Title,

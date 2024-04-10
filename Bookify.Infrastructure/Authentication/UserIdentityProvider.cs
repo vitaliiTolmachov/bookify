@@ -20,4 +20,13 @@ internal sealed class UserIdentityProvider : IUserIdentityProvider
                 .GetIdentityId() ??
             throw new ApplicationException("User context is unavailable");
     }
+    
+    public Guid GetIUserId()
+    {
+        return _httpContextAccessor
+                   .HttpContext?
+                   .User
+                   .GetUserId() ??
+               throw new ApplicationException("UserId is unavailable");
+    }
 }
