@@ -1,4 +1,5 @@
 ﻿using Bookify.Application.Abstractions.Authentication;
+using Bookify.Application.Abstractions.Caching;
 using Bookify.Application.Abstractions.Clock;
 using Bookify.Application.Abstractions.Email;
 using Bookify.Application.Data;
@@ -8,6 +9,7 @@ using Bookify.Domain.Bookings;
 using Bookify.Domain.Users;
 using Bookify.Infrastructure.Authentication;
 using Bookify.Infrastructure.Authorization;
+using Bookify.Infrastructure.Caching;
 using Bookify.Infrastructure.Clock;
 using Bookify.Infrastructure.Db;
 using Bookify.Infrastructure.Db.Repositories;
@@ -39,6 +41,8 @@ public static class DependencyInjection
         ConfigureAuthentication(services, configuration);
 
         ConfigureAuthorization(services);
+
+        AddCaching(services, configuration);
 
         return services;
     }
@@ -118,6 +122,18 @@ public static class DependencyInjection
         
         SqlMapper.AddTypeHandler(new DateOnlyHandler());
             
+        return services;
+    }
+
+    private static IServiceCollection AddCaching(
+        this IServiceCollection services,
+        IConfiguration configuration)
+    {
+        var connectionString = configuration.GetConnectionString("Cache") ??
+                               throw new KeyNotFoundException("Cache");
+
+        services.AddStackExchangeRedisCache(options => options.Configuration = connectionString);
+        services.AddSingleton<ICacheService, CacheService>();
         return services;
     }
 }
