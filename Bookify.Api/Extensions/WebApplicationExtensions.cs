@@ -21,4 +21,11 @@ public static class WebApplicationExtensions
 
         return appBuilder;
     }
+    
+    public static WebApplication UseCorrelationIdMiddleware(this WebApplication appBuilder)
+    {
+        appBuilder.UseMiddleware<CorrelationIdMiddleware>();
+
+        return appBuilder;
+    }
 }
