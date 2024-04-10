@@ -16,6 +16,7 @@ public static class DependencyInjection
             //Order is important!
             config.AddOpenBehavior(typeof(LoggingCommandBehaviour<,>));
             config.AddOpenBehavior(typeof(ValidatingCommandBehaviour<,>));
+            config.AddOpenBehavior(typeof(QueryCachingBehaviour<,>));
         });
         services.AddValidatorsFromAssemblyContaining(typeof(DependencyInjection));
         services.AddTransient<PricingService>();
