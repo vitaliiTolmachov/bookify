@@ -43,6 +43,29 @@ public static class DependencyInjection
         ConfigureAuthorization(services);
 
         AddCaching(services, configuration);
+        
+        AddCustomHealthChecks(services, configuration);
+
+        return services;
+    }
+    
+    private static IServiceCollection AddCustomHealthChecks(
+        this IServiceCollection services,
+        IConfiguration configuration)
+    {
+        var dbConnectionString = configuration.GetConnectionString("Database") ??
+                                 throw new KeyNotFoundException("Database");
+        
+        var redisConnectionString = configuration.GetConnectionString("Cache") ??
+                               throw new KeyNotFoundException("Cache");
+        
+        var keyCloakBaseUrl = configuration["Keycloak:BaseUrl"] ??
+                                    throw new KeyNotFoundException("Keycloak:BaseUrl");
+
+        services.AddHealthChecks()
+            .AddNpgSql(dbConnectionString)
+            .AddRedis(redisConnectionString)
+            .AddUrlGroup(new Uri(keyCloakBaseUrl), HttpMethod.Get, "keycloak");
 
         return services;
     }
