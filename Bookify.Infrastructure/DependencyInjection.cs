@@ -1,4 +1,5 @@
-﻿using Bookify.Application.Abstractions.Authentication;
+﻿using Asp.Versioning;
+using Bookify.Application.Abstractions.Authentication;
 using Bookify.Application.Abstractions.Caching;
 using Bookify.Application.Abstractions.Clock;
 using Bookify.Application.Abstractions.Email;
@@ -45,6 +46,8 @@ public static class DependencyInjection
         AddCaching(services, configuration);
         
         AddCustomHealthChecks(services, configuration);
+
+        AddApiVersioning(services);
 
         return services;
     }
@@ -157,6 +160,24 @@ public static class DependencyInjection
 
         services.AddStackExchangeRedisCache(options => options.Configuration = connectionString);
         services.AddSingleton<ICacheService, CacheService>();
+        return services;
+    }
+
+    private static IServiceCollection AddApiVersioning(this IServiceCollection services)
+    {
+        services.AddApiVersioning(options =>
+            {
+                options.ReportApiVersions = true;
+                options.ApiVersionReader = new UrlSegmentApiVersionReader();
+                options.DefaultApiVersion = new ApiVersion(1);
+            })
+            .AddMvc()
+            .AddApiExplorer(options =>
+            {
+                options.SubstituteApiVersionInUrl = true;
+                options.GroupNameFormat = "'v'V";
+            });
+        
         return services;
     }
 }

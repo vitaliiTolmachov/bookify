@@ -18,6 +18,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddApplicationLayer();
 builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.ConfigureOptions<ConfigureSwaggerOptions>();
 
 var app = builder.Build();
 
@@ -25,7 +26,17 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(options =>
+    {
+        var versionDescriptors = app.DescribeApiVersions();
+        foreach (var description in versionDescriptors)
+        {
+            var versionUrl = $"/swagger/{description.GroupName}/swagger.json";
+            var versionName = description.GroupName.ToUpperInvariant();
+            options.SwaggerEndpoint(versionUrl, versionName);
+
+        }
+    });
     app.ApplyMigrations();
     //app.SeedData();
 }
