@@ -28,7 +28,7 @@ public class PricingService
             new Money(priceForPeriod.Amount * amenityPercentage, currency):
             new Money(0, currency);
 
-        var totalPrice = Money.Zero(currency);
+        var totalPrice = priceForPeriod;
 
         if (!apartment.CleaningFee.IsZero())
         {

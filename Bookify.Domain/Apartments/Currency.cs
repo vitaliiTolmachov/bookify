@@ -2,8 +2,8 @@
 
 public record Currency
 {
-    private static readonly Currency Usd = new Currency("USD");
-    private static readonly Currency Eur = new Currency("EUR");
+    public static readonly Currency Usd = new Currency("USD");
+    public static readonly Currency Eur = new Currency("EUR");
 
     private static IReadOnlyCollection<Currency> AllowedCurrencies => new[]
     {
