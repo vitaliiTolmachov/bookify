@@ -19,6 +19,8 @@ Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-co
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bookify.Domain.UnitTests", "Bookify.Domain.UnitTests\Bookify.Domain.UnitTests.csproj", "{DC8307C4-E554-4CE0-80C3-442E50F2FDD6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bookify.Application.UnitTests", "Bookify.Application.UnitTests\Bookify.Application.UnitTests.csproj", "{099F6444-7BE6-4337-A520-6019E0964A7D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,6 +51,10 @@ Global
 		{DC8307C4-E554-4CE0-80C3-442E50F2FDD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DC8307C4-E554-4CE0-80C3-442E50F2FDD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DC8307C4-E554-4CE0-80C3-442E50F2FDD6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{099F6444-7BE6-4337-A520-6019E0964A7D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{099F6444-7BE6-4337-A520-6019E0964A7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{099F6444-7BE6-4337-A520-6019E0964A7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{099F6444-7BE6-4337-A520-6019E0964A7D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -59,5 +65,6 @@ Global
 		{0F0DE983-C248-4B93-886C-05F20181D6F5} = {204DDBB0-684C-447E-816B-060DD1A43098}
 		{B10D26E8-8666-4475-9B3E-B7DAD57F5FB1} = {204DDBB0-684C-447E-816B-060DD1A43098}
 		{DC8307C4-E554-4CE0-80C3-442E50F2FDD6} = {C272DE3D-259C-4019-912A-292AD0AA0BBF}
+		{099F6444-7BE6-4337-A520-6019E0964A7D} = {C272DE3D-259C-4019-912A-292AD0AA0BBF}
 	EndGlobalSection
 EndGlobal
