@@ -6,7 +6,7 @@ using MediatR;
 
 namespace Bookify.Application.Bookings.ReserveBooking;
 
-//MediatR pipeline responsible for that
+//MediatR pipeline responsible to register this class in pipeline
 internal sealed class BookingReservedDomainEventHandler : INotificationHandler<BookingReservedEvent>
 {
     private readonly IUserRepository _userRepository;
@@ -25,7 +25,7 @@ internal sealed class BookingReservedDomainEventHandler : INotificationHandler<B
     
     public async Task Handle(BookingReservedEvent notification, CancellationToken cancellationToken)
     {
-        var booking = await _bookingRepository.FindAsync(notification.Id, cancellationToken);
+        var booking = await _bookingRepository.FindAsync(notification.BookingId, cancellationToken);
 
         if (booking == null)
             return;

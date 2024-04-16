@@ -15,6 +15,7 @@ using Bookify.Infrastructure.Clock;
 using Bookify.Infrastructure.Db;
 using Bookify.Infrastructure.Db.Repositories;
 using Bookify.Infrastructure.Email;
+using Bookify.Infrastructure.Outbox;
 using Dapper;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -24,6 +25,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.JsonWebTokens;
+using Quartz;
 using AuthenticationOptions = Bookify.Infrastructure.Authentication.AuthenticationOptions;
 
 namespace Bookify.Infrastructure;
@@ -48,10 +50,22 @@ public static class DependencyInjection
         AddCustomHealthChecks(services, configuration);
 
         AddApiVersioning(services);
+        
+        AddBackgroundJobs(services, configuration);
 
         return services;
     }
-    
+
+    private static IServiceCollection AddBackgroundJobs(IServiceCollection services, IConfiguration configuration)
+    {
+        services.Configure<OutboxOptions>(configuration.GetSection("Outbox"));
+        services.AddQuartz();
+        services.AddQuartzHostedService(options => options.WaitForJobsToComplete = true);
+        services.ConfigureOptions<OutboxBackgroundJobSetup>();
+        
+        return services;
+    }
+
     private static IServiceCollection AddCustomHealthChecks(
         this IServiceCollection services,
         IConfiguration configuration)
