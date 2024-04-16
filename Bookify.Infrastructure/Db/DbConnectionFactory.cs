@@ -8,7 +8,7 @@ internal sealed class DbConnectionFactory : IDbConnectionFactory
 {
     private readonly string _connectionString;
 
-    internal DbConnectionFactory(string connectionString)
+    public DbConnectionFactory(string connectionString)
     {
         _connectionString = connectionString;
     }

@@ -20,6 +20,7 @@
 
     <ItemGroup>
         <InternalsVisibleTo Include="Bookify.Application.UnitTests" />
+        <InternalsVisibleTo Include="Bookify.Application.IntegrationTests" />
     </ItemGroup>
 
 </Project>
