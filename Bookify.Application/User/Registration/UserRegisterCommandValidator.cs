@@ -2,7 +2,7 @@
 
 namespace Bookify.Application.User.Registration;
 
-public class UserRegisterCommandValidator : AbstractValidator<UserRegisterCommand>
+internal class UserRegisterCommandValidator : AbstractValidator<UserRegisterCommand>
 {
     public UserRegisterCommandValidator()
     {

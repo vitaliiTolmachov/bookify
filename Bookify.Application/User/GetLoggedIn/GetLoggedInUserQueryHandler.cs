@@ -6,7 +6,7 @@ using Dapper;
 
 namespace Bookify.Application.User.GetLoggedIn;
 
-public class GetLoggedInUserQueryHandler : IQueryHandler<GetLoggedInUserQuery, UserResponse>
+internal class GetLoggedInUserQueryHandler : IQueryHandler<GetLoggedInUserQuery, UserResponse>
 {
     private readonly IDbConnectionFactory _dbConnectionFactory;
     private readonly IUserIdentityProvider _userIdentityProvider;

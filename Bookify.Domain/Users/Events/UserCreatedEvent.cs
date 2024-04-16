@@ -2,4 +2,4 @@
 
 namespace Bookify.Domain.Users.Events;
 
-public record UserCreatedEvent(Guid UserId) : IDomainEvent;
+public sealed record UserCreatedEvent(Guid UserId) : IDomainEvent;
